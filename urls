@@ -1,0 +1,10 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("", views.home),
+    path("register/", views.register),
+    path("add-author/", views.add_author),
+    path("add-quote/", views.add_quote),
+    path("tag/<str:tag_name>/", views.tag_quotes),
+]
