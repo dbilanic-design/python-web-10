@@ -1,0 +1,3 @@
+def tag_quotes(request, tag_name):
+    quotes = Quote.objects.filter(tags__name=tag_name)
+    return render(request, "tag.html", {"quotes": quotes})
