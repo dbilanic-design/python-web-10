@@ -1,0 +1,36 @@
+from django.contrib.auth.decorators import login_required
+from .models import Author, Quote, Tag
+from django.shortcuts import render, redirect
+
+@login_required
+def add_author(request):
+    if request.method == "POST":
+        Author.objects.create(
+            fullname=request.POST["fullname"],
+            born_date=request.POST["born_date"],
+            born_location=request.POST["born_location"],
+            description=request.POST["description"]
+        )
+        return redirect("/")
+    return render(request, "add_author.html")
+
+
+@login_required
+def add_quote(request):
+    if request.method == "POST":
+        author = Author.objects.get(id=request.POST["author"])
+        quote = Quote.objects.create(
+            text=request.POST["text"],
+            author=author,
+            user=request.user
+        )
+
+        tags = request.POST["tags"].split(",")
+        for tag_name in tags:
+            tag, _ = Tag.objects.get_or_create(name=tag_name.strip())
+            quote.tags.add(tag)
+
+        return redirect("/")
+
+    authors = Author.objects.all()
+    return render(request, "add_quote.html", {"authors": authors})
