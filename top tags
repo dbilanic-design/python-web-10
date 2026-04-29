@@ -1,0 +1,3 @@
+from django.db.models import Count
+
+top_tags = Tag.objects.annotate(num=Count("quote")).order_by("-num")[:10]
