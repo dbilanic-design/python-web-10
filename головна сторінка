@@ -1,0 +1,11 @@
+from django.core.paginator import Paginator
+
+def home(request):
+    quotes = Quote.objects.all().order_by("-id")
+
+    paginator = Paginator(quotes, 10)
+    page = request.GET.get("page")
+
+    quotes_page = paginator.get_page(page)
+
+    return render(request, "index.html", {"quotes": quotes_page})
